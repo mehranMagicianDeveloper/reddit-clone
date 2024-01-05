@@ -14,6 +14,7 @@ import {
 import React from "react";
 import { useRecoilState } from "recoil";
 import AuthInputs from "./AuthInputs";
+import OAuthButtons from "./OAuthButtons";
 
 const AuthModal: React.FC = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
@@ -47,22 +48,22 @@ const AuthModal: React.FC = () => {
       <Modal isOpen={modalState.open} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{handleTitle()}</ModalHeader>
+          <ModalHeader textAlign="center">{handleTitle()}</ModalHeader>
           <ModalCloseButton />
           <ModalBody
             display="flex"
             flexDirection="column"
-            alignContent="center"
+            alignItems="center"
             justifyContent="center"
+            pb={6}
           >
             <Flex
               direction="column"
               align="center"
               justify="center"
               width="70%"
-              border="1px solid red"
             >
-              {/* <OAuthButtons /> */}
+              <OAuthButtons />
               <AuthInputs />
               {/* <ResetPassword /> */}
             </Flex>

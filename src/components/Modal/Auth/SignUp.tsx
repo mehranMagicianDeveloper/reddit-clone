@@ -1,19 +1,21 @@
 import { authModalState } from "@/src/atoms/authModalAtom";
-import { Button, Flex, Input, Text } from "@chakra-ui/react";
+import { Input, Button, Flex, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 
-const Login: React.FC = () => {
+const SignUp: React.FC = () => {
   const setModalState = useSetRecoilState(authModalState);
 
   interface FormState {
     email: string;
     password: string;
+    confirmPassword: string;
   }
 
-  const [loginForm, setLoginForm] = useState<FormState>({
+  const [signUpForm, setSignUpForm] = useState<FormState>({
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,7 +23,7 @@ const Login: React.FC = () => {
   };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginForm((prev) => ({
+    setSignUpForm((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,
     }));
@@ -73,23 +75,45 @@ const Login: React.FC = () => {
         }}
         bg="gray.50"
       />
+      <Input
+        required
+        name="confirmPassword"
+        placeholder="confirm password"
+        type="password"
+        mb={2}
+        onChange={handleOnChange}
+        fontSize="10pt"
+        _placeholder={{ color: "gray.500" }}
+        _hover={{
+          bg: "white",
+          border: "1px solid",
+          borderColor: "blue.500",
+        }}
+        _focus={{
+          outline: "none",
+          bg: "white",
+          border: "1px solid",
+          borderColor: "blue.500",
+        }}
+        bg="gray.50"
+      />
       <Button type="submit" width="100%" mt={2} mb={2} height="36px">
-        Login
+        Sign Up
       </Button>
-      <Flex justifyContent="center" fontSize="9pt">
-        <Text mr={2}>New here ?</Text>
+      <Flex fontSize="9pt" alignContent="center" justify="center">
+        <Text mr={2}>Already a redditor ?</Text>
         <Text
           color="blue.500"
-          fontWeight={700}
-          cursor="pointer"
           onClick={() => {
-            setModalState((prev) => ({ ...prev, view: "signup" }));
+            setModalState((prev) => ({ ...prev, view: "login" }));
           }}
+          cursor="pointer"
+          fontWeight={700}
         >
-          Sign Up
+          Log In
         </Text>
       </Flex>
     </form>
   );
 };
-export default Login;
+export default SignUp;
