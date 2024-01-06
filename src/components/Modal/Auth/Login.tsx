@@ -95,6 +95,20 @@ const Login: React.FC = () => {
         Login
       </Button>
       <Flex justifyContent="center" fontSize="9pt">
+        <Text mr={2}>Forgot your password ?</Text>
+        <Text
+          color="blue.500"
+          fontWeight={700}
+          mb={2}
+          cursor="pointer"
+          onClick={() => {
+            setModalState((prev) => ({ ...prev, view: "resetPassword" }));
+          }}
+        >
+          Reset
+        </Text>
+      </Flex>
+      <Flex justifyContent="center" fontSize="9pt">
         <Text mr={2}>New here ?</Text>
         <Text
           color="blue.500"
