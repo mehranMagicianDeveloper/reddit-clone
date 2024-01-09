@@ -28,6 +28,7 @@ const Directory: React.FC<DirectoryProps> = () => {
           align="center"
           justify="space-between"
           width={{ base: "auto", lg: "200px" }}
+          ml={1}
         >
           <Flex align="center">
             <Icon as={TiHome} fontSize={24} mr={{ base: 1, md: 2 }} />

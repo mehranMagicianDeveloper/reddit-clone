@@ -1,4 +1,6 @@
 import { Communities } from "@/src/atoms/communitiesAtom";
+import Header from "@/src/components/Community/Header";
+import CommunityNotFound from "@/src/components/Community/NotFound";
 import { firestore } from "@/src/firebase/clientApp";
 import { Flex, Text } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
@@ -12,12 +14,12 @@ type CommunityPageProps = {
 
 const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {
   if (!communityData) {
-    return <div>This community does not exist</div>;
+    return <CommunityNotFound />;
   }
 
   return (
     <Flex>
-      <Text>Community Name {communityData.id}</Text>
+      <Header communityData={communityData} />
     </Flex>
   );
 };
