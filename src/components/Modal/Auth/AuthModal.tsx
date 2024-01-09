@@ -14,8 +14,9 @@ import { useRecoilState } from "recoil";
 import AuthInputs from "./AuthInputs";
 import OAuthButtons from "./OAuthButtons";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/src/firebase/clientApp";
+import { auth, firestore } from "@/src/firebase/clientApp";
 import ResetPassword from "./ResetPassword";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const AuthModal: React.FC = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
@@ -31,9 +32,7 @@ const AuthModal: React.FC = () => {
 
   useEffect(() => {
     if (user) handleClose();
-    console.log("user:", user);
-    console.log("loading:", loading);
-    console.log("error:", error);
+    handleSavingUser();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -45,6 +44,22 @@ const AuthModal: React.FC = () => {
       return "Sign Up";
     } else if (modalState.view === "resetPassword") {
       return "Reset Password";
+    }
+  };
+
+  const handleSavingUser = async () => {
+    if (user) {
+      const userDocREf = doc(firestore, "users", user.uid);
+      const userDoc = await getDoc(userDocREf);
+      if (userDoc.exists()) {
+        return;
+      }
+      await setDoc(userDocREf, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        providerData: user.providerData,
+      });
     }
   };
 

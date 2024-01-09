@@ -17,7 +17,13 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
@@ -53,6 +59,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   };
 
   const handleCreateCommunity = async () => {
+    setError("");
     // Validate community name
     const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if (format.test(communityName) || communityName.length < 3) {
@@ -69,20 +76,33 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
       const communityDocRef = doc(firestore, "communities", communityName);
 
       // check if community exists
-      const communityDoc = await getDoc(communityDocRef);
-      if (communityDoc.exists()) {
-        throw new Error(
-          `Sorry, r/${communityName} is already taken. Try another.`
+
+      await runTransaction(firestore, async (transaction) => {
+        const communityDoc = await transaction.get(communityDocRef);
+        if (communityDoc.exists()) {
+          throw new Error(
+            `Sorry, r/${communityName} is already taken. Try another.`
+          );
+        }
+        transaction.set(communityDocRef, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMemebers: 1,
+          privacyType: communityType,
+        });
+
+        // create community snippet on user
+
+        transaction.set(
+          doc(firestore, `users/${user?.uid}/communitySnippets`, communityName),
+          {
+            communityId: communityName,
+            isModertor: true,
+          }
         );
-      }
+      });
 
       // create a new community
-      await setDoc(communityDocRef, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMemebers: 1,
-        privacyType: communityType,
-      });
     } catch (error: any) {
       console.log("handleCreateCommunity error: ", error);
       setError(error.message);
@@ -200,7 +220,11 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
           <Button variant="outline" height="30px" mr={3} onClick={handleClose}>
             Cancel
           </Button>
-          <Button height="30px" onClick={handleCreateCommunity}>
+          <Button
+            height="30px"
+            onClick={handleCreateCommunity}
+            isLoading={loading}
+          >
             Create Community
           </Button>
         </ModalFooter>
