@@ -1,6 +1,7 @@
 import { Communities } from "@/src/atoms/communitiesAtom";
 import Header from "@/src/components/Community/Header";
 import CommunityNotFound from "@/src/components/Community/NotFound";
+import PageContent from "@/src/components/Layout/PageContent";
 import { firestore } from "@/src/firebase/clientApp";
 import { Flex, Text } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
@@ -18,8 +19,12 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {
   }
 
   return (
-    <Flex>
+    <Flex direction="column">
       <Header communityData={communityData} />
+      <PageContent maxWidth="300px">
+        <>Left side</>
+        <>Right side</>
+      </PageContent>
     </Flex>
   );
 };

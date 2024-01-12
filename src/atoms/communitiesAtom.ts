@@ -1,4 +1,6 @@
+import exp from "constants";
 import { Timestamp } from "firebase/firestore";
+import { atom } from "recoil";
 
 export interface Communities {
   id: string;
@@ -8,3 +10,21 @@ export interface Communities {
   createdAt?: Timestamp;
   imageURL?: string;
 }
+
+interface CommunitySnippet {
+  communityId: string;
+  isModerate?: boolean;
+  imageURL?: string;
+}
+interface CommunityState {
+  mySnippets: CommunitySnippet[];
+}
+
+const defaultCommunityState: CommunityState = {
+  mySnippets: [],
+};
+
+export const communityState = atom<CommunityState>({
+  key: "communityState",
+  default: defaultCommunityState,
+});
