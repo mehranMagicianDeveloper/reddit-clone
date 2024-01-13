@@ -1,4 +1,4 @@
-import { Communities } from "@/src/atoms/communitiesAtom";
+import { Community } from "@/src/atoms/communitiesAtom";
 import Header from "@/src/components/Community/Header";
 import CommunityNotFound from "@/src/components/Community/NotFound";
 import PageContent from "@/src/components/Layout/PageContent";
@@ -10,7 +10,7 @@ import React from "react";
 import safeJsonStringify from "safe-json-stringify";
 
 type CommunityPageProps = {
-  communityData: Communities;
+  communityData: Community;
 };
 
 const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {

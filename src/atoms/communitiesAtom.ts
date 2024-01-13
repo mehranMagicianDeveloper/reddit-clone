@@ -2,7 +2,7 @@ import exp from "constants";
 import { Timestamp } from "firebase/firestore";
 import { atom } from "recoil";
 
-export interface Communities {
+export interface Community {
   id: string;
   creatorId: string;
   numberOfMembers: number;
@@ -11,7 +11,7 @@ export interface Communities {
   imageURL?: string;
 }
 
-interface CommunitySnippet {
+export interface CommunitySnippet {
   communityId: string;
   isModerate?: boolean;
   imageURL?: string;
