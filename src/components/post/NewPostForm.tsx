@@ -47,6 +47,7 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
             key={tab.title}
             tabItem={tab}
             selected={tab.title === selectedTab}
+            setSelectedTab={setSelectedTab}
           />
         ))}
       </Flex>

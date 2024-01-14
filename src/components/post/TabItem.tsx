@@ -5,9 +5,14 @@ import { TabItemStr } from "./NewPostForm";
 type TabItemProps = {
   tabItem: TabItemStr;
   selected: boolean;
+  setSelectedTab: (value: string) => void;
 };
 
-const TabItem: React.FC<TabItemProps> = ({ tabItem, selected }) => {
+const TabItem: React.FC<TabItemProps> = ({
+  tabItem,
+  selected,
+  setSelectedTab,
+}) => {
   return (
     <Flex
       align="center"
@@ -18,12 +23,15 @@ const TabItem: React.FC<TabItemProps> = ({ tabItem, selected }) => {
       _hover={{
         bg: "gray.50",
       }}
+      color={selected ? "blue.500" : "gray.500"}
+      borderWidth={selected ? "0px 1px 2px 0px" : "0px 1px 1px 0px"}
+      borderBottomColor={selected ? "blue.500" : "gray.200"}
+      borderRightColor="gray.200"
+      onClick={() => setSelectedTab(tabItem.title)}
     >
       <Flex align="center" height="20px" mr={2}>
         <Icon as={tabItem.icon} mr={2} color={selected ? "blue.400" : ""} />
-        <Text fontSize="10pt" color={selected ? "blue.400" : ""}>
-          {tabItem.title}
-        </Text>
+        <Text fontSize="10pt">{tabItem.title}</Text>
       </Flex>
     </Flex>
   );
