@@ -8,17 +8,18 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { communityState } from "../atoms/communitiesAtom";
 import { auth, firestore } from "../firebase/clientApp";
+import { authModalState } from "../atoms/authModalAtom";
 
 const useCommunityData = () => {
   const [user] = useAuthState(auth);
   const [communityStateValue, setCommunityStateValue] =
     useRecoilState(communityState);
-
+  const setAuthModalState = useSetRecoilState(authModalState);
   const [loading, setLoading] = useState(false);
-  const [errorm, setError] = useState("");
+  const [error, setError] = useState("");
 
   const onJoinOrLeaveCommunity = (
     communityData: Community,
@@ -26,6 +27,10 @@ const useCommunityData = () => {
   ) => {
     // is user singed in
     // if not open auth modal
+    if (!user) {
+      setAuthModalState({ open: true, view: "login" });
+      return;
+    }
 
     if (isJoined) {
       leaveCommunity(communityData.id);
@@ -100,7 +105,7 @@ const useCommunityData = () => {
       const batch = writeBatch(firestore);
 
       batch.delete(
-        doc(firestore, `users/${user?.uid}/communitySnippet`, communityId)
+        doc(firestore, `users/${user?.uid}/communitySnippets`, communityId)
       );
 
       // update the number of members

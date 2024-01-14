@@ -1,8 +1,15 @@
+import PageContent from "@/src/components/Layout/PageContent";
+import { Flex } from "@chakra-ui/react";
 import React from "react";
 
 type submitProps = {};
 
 const Submit: React.FC<submitProps> = () => {
-  return <div>Have a good coding</div>;
+  return (
+    <PageContent>
+      <>New Post</>
+      <>About side</>
+    </PageContent>
+  );
 };
 export default Submit;

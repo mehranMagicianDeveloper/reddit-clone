@@ -1,4 +1,5 @@
 import { Community } from "@/src/atoms/communitiesAtom";
+import CreatePostLink from "@/src/components/Community/CreatePostLink";
 import Header from "@/src/components/Community/Header";
 import CommunityNotFound from "@/src/components/Community/NotFound";
 import PageContent from "@/src/components/Layout/PageContent";
@@ -21,8 +22,10 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {
   return (
     <Flex direction="column">
       <Header communityData={communityData} />
-      <PageContent maxWidth="300px">
-        <>Left side</>
+      <PageContent>
+        <>
+          <CreatePostLink />
+        </>
         <>Right side</>
       </PageContent>
     </Flex>
