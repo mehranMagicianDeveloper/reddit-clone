@@ -51,11 +51,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ user }) => {
                 display={{ base: "none", md: "flex" }}
                 fontSize="8pt"
                 align="flex-start"
-                mr={8}
+                mr={3}
               >
-                <Text fontWeight={700}>
-                  {user?.displayName || user.email?.split("@")[0]}
-                </Text>
+                <Text fontWeight={700}>{user.email?.split("@")[0]}</Text>
                 <Flex>
                   <Icon as={IoSparkles} color="brand.100" mr={1} />
                   <Text color="gray.400">1 karma</Text>
