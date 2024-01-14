@@ -1,5 +1,6 @@
 import PageContent from "@/src/components/Layout/PageContent";
-import { Flex } from "@chakra-ui/react";
+import NewPostForm from "@/src/components/post/NewPostForm";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
 type submitProps = {};
@@ -7,7 +8,12 @@ type submitProps = {};
 const Submit: React.FC<submitProps> = () => {
   return (
     <PageContent>
-      <>New Post</>
+      <>
+        <Box padding="14px 0px" borderBottom="1px solid" borderColor="white">
+          <Text>Create Post</Text>
+        </Box>
+        <NewPostForm />
+      </>
       <>About side</>
     </PageContent>
   );
