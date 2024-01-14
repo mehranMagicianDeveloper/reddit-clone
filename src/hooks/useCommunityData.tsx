@@ -66,7 +66,11 @@ const useCommunityData = () => {
       };
 
       batch.set(
-        doc(firestore, `users/${user?.uid}/communitySnippet`, communityData.id),
+        doc(
+          firestore,
+          `users/${user?.uid}/communitySnippets`,
+          communityData.id
+        ),
         newSnippet
       );
 
