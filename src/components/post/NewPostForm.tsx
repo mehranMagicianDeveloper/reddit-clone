@@ -5,6 +5,7 @@ import { BsLink45Deg, BsMic } from "react-icons/bs";
 import { IoDocumentText, IoImageOutline } from "react-icons/io5";
 import { AiFillCloseCircle } from "react-icons/ai";
 import TabItem from "./TabItem";
+import TextInputs from "./PostForm/TextInputs";
 
 type NewPostFormProps = {};
 
@@ -60,8 +61,10 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
             selected={tab.title === selectedTab}
             setSelectedTab={setSelectedTab}
           />
-          // <TextInputs />
         ))}
+      </Flex>
+      <Flex>
+        <TextInputs />
       </Flex>
     </Flex>
   );
