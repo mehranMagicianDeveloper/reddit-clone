@@ -8,7 +8,7 @@ import TabItem from "./TabItem";
 
 type NewPostFormProps = {};
 
-const formTabs = [
+const formTabs: TabItemStr[] = [
   {
     title: "Post",
     icon: IoDocumentText,
@@ -38,6 +38,17 @@ export type TabItemStr = {
 
 const NewPostForm: React.FC<NewPostFormProps> = () => {
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
+  const [textInputs, setTextInputs] = useState({
+    title: "",
+    body: "",
+  });
+  const [selectedFile, setSelectedFile] = useState<string>();
+
+  const handleCreatePost = () => {};
+
+  const onSelectImage = () => {};
+
+  const onTextChange = () => {};
 
   return (
     <Flex direction="column" bg="white" borderRadius={4} mt={2}>
@@ -49,6 +60,7 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
             selected={tab.title === selectedTab}
             setSelectedTab={setSelectedTab}
           />
+          // <TextInputs />
         ))}
       </Flex>
     </Flex>
