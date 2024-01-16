@@ -1,24 +1,23 @@
-import { Flex, Icon } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { BiPoll } from "react-icons/bi";
-import { BsLink45Deg, BsMic } from "react-icons/bs";
-import { IoDocumentText, IoImageOutline } from "react-icons/io5";
-import { AiFillCloseCircle } from "react-icons/ai";
-import TabItem from "./TabItem";
-import TextInputs from "./PostForm/TextInputs";
-import UploadImage from "./PostForm/UploadImage";
 import { Post } from "@/src/atoms/postAtom";
+import { firestore, storage } from "@/src/firebase/clientApp";
+import { Flex, Icon } from "@chakra-ui/react";
 import { User } from "firebase/auth";
-import { useRouter } from "next/router";
 import {
   Timestamp,
+  addDoc,
   collection,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { firestore, storage } from "@/src/firebase/clientApp";
-import { addDoc } from "firebase/firestore/lite";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { BiPoll } from "react-icons/bi";
+import { BsLink45Deg, BsMic } from "react-icons/bs";
+import { IoDocumentText, IoImageOutline } from "react-icons/io5";
+import TextInputs from "./PostForm/TextInputs";
+import UploadImage from "./PostForm/UploadImage";
+import TabItem from "./TabItem";
 
 type NewPostFormProps = {
   user: User;
@@ -83,16 +82,17 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
     setLoading(true);
     // store the post on db
     try {
-      const postDocref = await addDoc(collection(firestore, "posts"), newPost);
+      const postDocRef = await addDoc(collection(firestore, "posts"), newPost);
       // check for selected file
       if (selectedFile) {
         // store in storage => getDownloadURL (return image url)
-        const imageRef = ref(storage, `posts/${postDocref.id}/image`);
+        const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
         await uploadString(imageRef, selectedFile, "data_url");
         const downloadURL = await getDownloadURL(imageRef);
 
         // update the post doc by adding image url to post
-        await updateDoc(postDocref, {
+        await updateDoc(postDocRef, {
+          id: postDocRef.id,
           imageURL: downloadURL,
         });
       }
