@@ -49,7 +49,11 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
 
   const onSelectImage = () => {};
 
-  const onTextChange = () => {};
+  const onTextChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+  };
 
   return (
     <Flex direction="column" bg="white" borderRadius={4} mt={2}>
@@ -64,7 +68,12 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
         ))}
       </Flex>
       <Flex>
-        <TextInputs />
+        <TextInputs
+          textInputs={textInputs}
+          onChange={onTextChange}
+          handleCreatePost={handleCreatePost}
+          loading={false}
+        />
       </Flex>
     </Flex>
   );
