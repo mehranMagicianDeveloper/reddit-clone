@@ -10,7 +10,15 @@ import UploadImage from "./PostForm/UploadImage";
 import { Post } from "@/src/atoms/postAtom";
 import { User } from "firebase/auth";
 import { useRouter } from "next/router";
-import { Timestamp, serverTimestamp } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { firestore, storage } from "@/src/firebase/clientApp";
+import { addDoc } from "firebase/firestore/lite";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 type NewPostFormProps = {
   user: User;
@@ -52,6 +60,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
     body: "",
   });
   const [selectedFile, setSelectedFile] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const handleCreatePost = async () => {
     const { communityId } = router.query;
@@ -70,10 +79,27 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
       comnunityImageURL: "",
       createdAt: serverTimestamp() as Timestamp,
     };
+
+    setLoading(true);
     // store the post on db
-    // check for selected file
-    // store in storage => getDownloadURL (return image url)
-    // update the post doc by adding image url to post
+    try {
+      const postDocref = await addDoc(collection(firestore, "posts"), newPost);
+      // check for selected file
+      if (selectedFile) {
+        // store in storage => getDownloadURL (return image url)
+        const imageRef = ref(storage, `posts/${postDocref.id}/image`);
+        await uploadString(imageRef, selectedFile, "data_url");
+        const downloadURL = await getDownloadURL(imageRef);
+
+        // update the post doc by adding image url to post
+        await updateDoc(postDocref, {
+          imageURL: downloadURL,
+        });
+      }
+    } catch (error: any) {
+      console.log("handleCreatePost", error.message);
+    }
+    setLoading(false);
     // redirect uesr to the community page
   };
 
@@ -117,7 +143,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
             textInputs={textInputs}
             onChange={onTextChange}
             handleCreatePost={handleCreatePost}
-            loading={false}
+            loading={loading}
           />
         )}
         {selectedTab === "Images & Video" && (
