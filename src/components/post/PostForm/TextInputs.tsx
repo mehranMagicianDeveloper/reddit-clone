@@ -20,7 +20,7 @@ const TextInputs: React.FC<TextInputsProps> = ({
   loading,
 }) => {
   return (
-    <Stack spacing={3} width="100%" padding="0px 16px">
+    <Stack spacing={3} width="100%">
       <Input
         name="title"
         value={textInputs.title}
@@ -28,7 +28,6 @@ const TextInputs: React.FC<TextInputsProps> = ({
         fontSize="10pt"
         borderRadius={4}
         placeholder="Title"
-        mt={3}
         _placeholder={{ color: "gray.500" }}
         _focus={{
           outline: "none",
@@ -46,7 +45,6 @@ const TextInputs: React.FC<TextInputsProps> = ({
         fontSize="10pt"
         borderRadius={4}
         placeholder="Text (optional)"
-        mb={1}
         _focus={{
           outline: "none",
           border: "1px solid",
@@ -56,11 +54,10 @@ const TextInputs: React.FC<TextInputsProps> = ({
       />
       <Flex justify="flex-end">
         <Button
-          mb={3}
           height="36px"
           padding="0px 30px"
           disabled={textInputs.title ? false : true}
-          onClick={() => {}}
+          onClick={handleCreatePost}
           isLoading={loading}
         >
           Post

@@ -52,7 +52,10 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
   const onTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = event.target;
+    const {
+      target: { name, value },
+    } = event;
+    setTextInputs((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -67,13 +70,15 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
           />
         ))}
       </Flex>
-      <Flex>
-        <TextInputs
-          textInputs={textInputs}
-          onChange={onTextChange}
-          handleCreatePost={handleCreatePost}
-          loading={false}
-        />
+      <Flex p={4}>
+        {selectedTab === "Post" && (
+          <TextInputs
+            textInputs={textInputs}
+            onChange={onTextChange}
+            handleCreatePost={handleCreatePost}
+            loading={false}
+          />
+        )}
       </Flex>
     </Flex>
   );
