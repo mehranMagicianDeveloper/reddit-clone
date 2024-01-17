@@ -1,6 +1,6 @@
 import { Post } from "@/src/atoms/postAtom";
 import { firestore, storage } from "@/src/firebase/clientApp";
-import { Flex, Icon } from "@chakra-ui/react";
+import { Flex, Text, Icon } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import {
   Timestamp,
@@ -18,6 +18,12 @@ import { IoDocumentText, IoImageOutline } from "react-icons/io5";
 import TextInputs from "./PostForm/TextInputs";
 import UploadImage from "./PostForm/UploadImage";
 import TabItem from "./TabItem";
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+} from "@chakra-ui/react";
 
 type NewPostFormProps = {
   user: User;
@@ -60,8 +66,10 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
   });
   const [selectedFile, setSelectedFile] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleCreatePost = async () => {
+    setError(false);
     const { communityId } = router.query;
 
     // create post object => type Post
@@ -98,6 +106,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
       }
     } catch (error: any) {
       console.log("handleCreatePost", error.message);
+      setError(true);
     }
     setLoading(false);
     // redirect uesr to the community page
@@ -157,6 +166,12 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
           />
         )}
       </Flex>
+      {error && (
+        <Alert status="error">
+          <AlertIcon />
+          <Text>Error creating post</Text>
+        </Alert>
+      )}
     </Flex>
   );
 };
