@@ -1,5 +1,5 @@
 import PageContent from "@/src/components/Layout/PageContent";
-import NewPostForm from "@/src/components/Post/NewPostForm";
+import NewPostForm from "@/src/components/Posts/NewPostForm";
 import { auth } from "@/src/firebase/clientApp";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
