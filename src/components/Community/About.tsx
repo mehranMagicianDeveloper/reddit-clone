@@ -1,4 +1,5 @@
 import { Community } from "@/src/atoms/communitiesAtom";
+import { auth } from "@/src/firebase/clientApp";
 import {
   Box,
   Button,
@@ -12,6 +13,7 @@ import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { RiCakeLine } from "react-icons/ri";
 
@@ -21,6 +23,8 @@ type AboutProps = {
 
 const About: React.FC<AboutProps> = ({ communityData }) => {
   const router = useRouter();
+  const [user] = useAuthState(auth);
+
   return (
     <Box position="sticky" top="14px">
       <Flex
@@ -71,6 +75,12 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
               Create Post
             </Button>
           </Link>
+          <Divider mt={1} />
+          {user?.uid === communityData.creatorId && (
+            <Flex direction="column">
+              <Text>Admin</Text>
+            </Flex>
+          )}
         </Stack>
       </Flex>
     </Box>
