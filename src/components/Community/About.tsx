@@ -1,13 +1,26 @@
 import { Community } from "@/src/atoms/communitiesAtom";
-import { Box, Divider, Flex, Icon, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Icon,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import moment from "moment";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { RiCakeLine } from "react-icons/ri";
 
 type AboutProps = {
   communityData: Community;
 };
 
 const About: React.FC<AboutProps> = ({ communityData }) => {
+  const router = useRouter();
   return (
     <Box position="sticky" top="14px">
       <Flex
@@ -36,6 +49,28 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
             </Flex>
           </Flex>
           <Divider />
+          <Flex
+            align="center"
+            width="100%"
+            padding={1}
+            fontSize="10pt"
+            fontWeight={500}
+          >
+            <Icon as={RiCakeLine} fontSize={18} mr={2} />
+            {communityData.createdAt && (
+              <Text>
+                Created{" "}
+                {moment(
+                  new Date(communityData.createdAt.seconds * 1000)
+                ).format("MMM DD, YYYY")}
+              </Text>
+            )}
+          </Flex>
+          <Link href={`/r/${router.query.communityId}/submit`}>
+            <Button width="100%" height="30px">
+              Create Post
+            </Button>
+          </Link>
         </Stack>
       </Flex>
     </Box>
