@@ -2,19 +2,11 @@ import { Community } from "@/src/atoms/communitiesAtom";
 import { Post } from "@/src/atoms/postAtom";
 import { auth, firestore } from "@/src/firebase/clientApp";
 import usePosts from "@/src/hooks/usePosts";
-import { Flex, Stack } from "@chakra-ui/react";
-import {
-  collection,
-  getDoc,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { Stack } from "@chakra-ui/react";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import PostItem from "./PostItem";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { on } from "events";
+import PostItem from "./PostItem";
 import PostLoader from "./PostLoader";
 
 type PostsProps = {
@@ -66,7 +58,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
               post={post}
               userIsCreator={user?.uid === post.creatorId}
               userVoteValue={
-                postStateValue.postVotes.find((vote) => vote.postId === vote.id)
+                postStateValue.postVotes.find((vote) => vote.postId === post.id)
                   ?.voteValue
               }
               onVote={onVote}

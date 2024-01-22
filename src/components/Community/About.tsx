@@ -1,4 +1,5 @@
 import { Community, communityState } from "@/src/atoms/communitiesAtom";
+import { postState } from "@/src/atoms/postAtom";
 import { auth, firestore, storage } from "@/src/firebase/clientApp";
 import useSelectFile from "@/src/hooks/useSelectFile";
 import {
@@ -12,7 +13,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import moment from "moment";
 import Link from "next/link";

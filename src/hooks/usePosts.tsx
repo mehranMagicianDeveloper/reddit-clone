@@ -1,14 +1,24 @@
-import React from "react";
-import { useRecoilState } from "recoil";
-import { Post, postState } from "../atoms/postAtom";
+import React, { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { Post, PostVote, postState } from "../atoms/postAtom";
 import { deleteObject, ref } from "firebase/storage";
 import { auth, firestore, storage } from "../firebase/clientApp";
-import { collection, deleteDoc, doc, writeBatch } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+  writeBatch,
+} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { communityState } from "../atoms/communitiesAtom";
 
 const usePosts = () => {
   const [user] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postState);
+  const currentCommunity = useRecoilValue(communityState).currentCommunity;
 
   const onVote = async (post: Post, vote: number, communityId: string) => {
     try {
@@ -80,7 +90,7 @@ const usePosts = () => {
         postVotes: updatedPostVotes,
       }));
 
-      const postRef = doc(firestore, "post", post.id!);
+      const postRef = doc(firestore, "posts", post.id!);
       batch.update(postRef, {
         voteStatus: voteStatus + voteChange,
       });
@@ -115,6 +125,39 @@ const usePosts = () => {
       return false;
     }
   };
+
+  const communityPostVotes = async (communityId: string) => {
+    const postVotesQuery = query(
+      collection(firestore, "users", `${user?.uid}/postVotes`),
+      where("communityId", "==", communityId)
+    );
+
+    const postVoteDocs = await getDocs(postVotesQuery);
+    const postVotes = postVoteDocs.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setPostStateValue((prev) => ({
+      ...prev,
+      postVotes: postVotes as PostVote[],
+    }));
+  };
+
+  useEffect(() => {
+    if (!user || !currentCommunity?.id) return;
+    communityPostVotes(currentCommunity?.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, currentCommunity]);
+
+  useEffect(() => {
+    if (!user) {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return {
     postStateValue,
