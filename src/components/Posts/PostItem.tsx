@@ -43,6 +43,7 @@ const PostItem: React.FC<PostItemProps> = ({
 }) => {
   const [loadingImage, setLoadingImage] = useState(true);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const signlePostPage = !onSelectPost;
 
   const [error, setError] = useState("");
 
@@ -65,9 +66,8 @@ const PostItem: React.FC<PostItemProps> = ({
       bg="white"
       borderColor="gray.300"
       borderRadius={4}
-      _hover={{
-        borderColor: "gray.500",
-      }}
+      _hover={signlePostPage ? {} : { borderColor: "gray.500" }}
+      cursor={signlePostPage ? "" : "pointer"}
       onClick={() => onSelectPost && onSelectPost(post)}
     >
       <Flex
