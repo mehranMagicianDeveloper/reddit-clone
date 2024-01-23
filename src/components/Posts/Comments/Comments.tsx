@@ -2,9 +2,10 @@ import { Post } from "@/src/atoms/postAtom";
 import { Box, Flex } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import CommentInput from "./CommentInput";
 
 type CommentsProps = {
-  user: User;
+  user?: User;
   selectedPost: Post;
   communityId: string;
 };
@@ -39,8 +40,13 @@ const Comments: React.FC<CommentsProps> = ({
         fontSize="10pt"
         width="100%"
       >
-        {/* {comment inputs} */}
-        Hey comment good words
+        <CommentInput
+          commentText={commentText}
+          setCommentText={setCommentText}
+          user={user}
+          createLoading={createLoading}
+          onCreateComment={onCreateComment}
+        />
       </Flex>
     </Box>
   );

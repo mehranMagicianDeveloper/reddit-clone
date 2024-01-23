@@ -44,20 +44,29 @@ const PostPage: React.FC = () => {
   return (
     <PageContent>
       <>
-        {postStateValue.selectedPost && (
-          <PostItem
-            post={postStateValue.selectedPost!}
-            userIsCreator={user?.uid === postStateValue.selectedPost?.creatorId}
-            userVoteValue={
-              postStateValue.postVotes.find(
-                (vote) => vote.postId === postStateValue.selectedPost?.id
-              )?.voteValue
-            }
-            onVote={onVote}
-            onDeletePost={onDeletePost}
-          />
-        )}
-        <Comments />
+        {postStateValue.selectedPost &&
+          communityStateValue.currentCommunity && (
+            <>
+              <PostItem
+                post={postStateValue.selectedPost!}
+                userIsCreator={
+                  user?.uid === postStateValue.selectedPost?.creatorId
+                }
+                userVoteValue={
+                  postStateValue.postVotes.find(
+                    (vote) => vote.postId === postStateValue.selectedPost?.id
+                  )?.voteValue
+                }
+                onVote={onVote}
+                onDeletePost={onDeletePost}
+              />
+              <Comments
+                user={user!}
+                selectedPost={postStateValue.selectedPost}
+                communityId={communityStateValue.currentCommunity.id}
+              />
+            </>
+          )}
       </>
       <>
         {communityStateValue.currentCommunity && (
