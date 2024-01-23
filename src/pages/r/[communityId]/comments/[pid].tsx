@@ -4,15 +4,23 @@ import PageContent from "@/src/components/Layout/PageContent";
 import PostItem from "@/src/components/Posts/PostItem";
 import { auth } from "@/src/firebase/clientApp";
 import usePosts from "@/src/hooks/usePosts";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilValue } from "recoil";
 
 const PostPage: React.FC = () => {
-  const currentCommunity = useRecoilValue(communityState).currentCommunity!;
   const [user] = useAuthState(auth);
   const { postStateValue, setPostStateValue, onDeletePost, onVote } =
     usePosts();
+
+  const fetchPost = async () => {};
+
+  useEffect(() => {
+    if (!postStateValue.selectedPost) {
+      return;
+    }
+    fetchPost();
+  });
 
   return (
     <PageContent>
@@ -33,9 +41,7 @@ const PostPage: React.FC = () => {
 
         {/* {comments} */}
       </>
-      <>
-        <About communityData={currentCommunity} />
-      </>
+      <></>
     </PageContent>
   );
 };
