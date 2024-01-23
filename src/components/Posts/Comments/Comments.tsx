@@ -20,7 +20,10 @@ const Comments: React.FC<CommentsProps> = ({
   const [fetchLoading, setFetchLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
 
-  const onCreateComment = async (commentText: string) => {};
+  const onCreateComment = async (commentText: string) => {
+    //  create comment document
+    //  update post comment number
+  };
 
   const onDeleteComment = async (comment: any) => {};
 
