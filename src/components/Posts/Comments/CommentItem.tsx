@@ -43,27 +43,34 @@ const CommentItem: React.FC<CommentItemProps> = ({
           <Text color="gray.600">
             {moment(new Date(comment.createdAt.seconds * 1000)).fromNow()}
           </Text>
-          {loadingDelete && <Spinner />}
+          {loadingDelete && <Spinner size="sm" />}
         </Stack>
         <Text fontSize="10pt">{comment.text}</Text>
-        <Stack
-          spacing={1}
-          direction="row"
-          align="center"
-          cursor="pointer"
-          color="gray.500"
-        >
-          <Icon as={IoArrowUpCircleOutline} />
-          <Icon as={IoArrowDownCircleOutline} />
+        <Stack spacing={1} direction="row" align="center" color="gray.500">
+          <Icon
+            as={IoArrowUpCircleOutline}
+            _hover={{ color: "blue.500" }}
+            cursor="pointer"
+          />
+          <Icon
+            as={IoArrowDownCircleOutline}
+            _hover={{ color: "blue.500" }}
+            cursor="pointer"
+          />
           {userId === comment.creatorId && (
             <>
-              <Text fontSize="9pt" _hover={{ color: "blue.500" }}>
+              <Text
+                fontSize="9pt"
+                _hover={{ color: "blue.500" }}
+                cursor="pointer"
+              >
                 Edit
               </Text>
               <Text
                 fontSize="9pt"
                 _hover={{ color: "blue.500" }}
                 onClick={() => onDeleteComment(comment)}
+                cursor="pointer"
               >
                 Delete
               </Text>
