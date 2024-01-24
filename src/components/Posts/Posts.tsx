@@ -26,6 +26,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
 
   const getPosts = async () => {
     setLoading(true);
+
     try {
       const postsQuery = query(
         collection(firestore, "posts"),
@@ -46,11 +47,14 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
 
   useEffect(() => {
     getPosts();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
       {loading ? (
+        <PostLoader />
+      ) : (
         <Stack>
           {postStateValue.posts.map((post) => (
             <PostItem
@@ -67,8 +71,6 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
             />
           ))}
         </Stack>
-      ) : (
-        <PostLoader />
       )}
     </>
   );
