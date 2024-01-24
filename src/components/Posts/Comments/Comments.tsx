@@ -1,35 +1,24 @@
 import { Post, postState } from "@/src/atoms/postAtom";
-import { Box, Flex } from "@chakra-ui/react";
+import { firestore } from "@/src/firebase/clientApp";
+import { Box, Flex, Stack } from "@chakra-ui/react";
 import { User } from "firebase/auth";
-import React, { useEffect, useState } from "react";
-import CommentInput from "./CommentInput";
 import {
   Timestamp,
   collection,
   doc,
   increment,
-  query,
   serverTimestamp,
   writeBatch,
 } from "firebase/firestore";
-import { firestore } from "@/src/firebase/clientApp";
+import React, { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
+import CommentInput from "./CommentInput";
+import CommentItem, { Comment } from "./CommentItem";
 
 type CommentsProps = {
   user?: User;
   selectedPost: Post;
   communityId: string;
-};
-
-export type Comment = {
-  id?: string;
-  creatorId: string;
-  creatorDisplayText: string;
-  communityId: string;
-  postId: string;
-  postTitle: string;
-  text: string;
-  createdAt: Timestamp;
 };
 
 const Comments: React.FC<CommentsProps> = ({
@@ -41,6 +30,7 @@ const Comments: React.FC<CommentsProps> = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const setPostState = useSetRecoilState(postState);
 
   const onCreateComment = async (commentText: string) => {
@@ -63,6 +53,8 @@ const Comments: React.FC<CommentsProps> = ({
         createdAt: serverTimestamp() as Timestamp,
       };
       batch.set(commentDocRef, newComment);
+
+      newComment.createdAt = { seconds: Date.now() / 1000 } as Timestamp;
 
       const postDocRef = doc(firestore, "posts", selectedPost.id!);
       batch.update(postDocRef, {
@@ -89,7 +81,8 @@ const Comments: React.FC<CommentsProps> = ({
     setCreateLoading(false);
   };
 
-  const onDeleteComment = async (comment: any) => {
+  const onDeleteComment = async (comment: Comment) => {
+    setDeleteLoading(true);
     // delete comment document
     // update post comment number -1
     try {
@@ -97,6 +90,7 @@ const Comments: React.FC<CommentsProps> = ({
       console.log("onDeleteComment error", error);
     }
     // update client state
+    setDeleteLoading(false);
   };
 
   const getPostComments = async () => {};
@@ -123,6 +117,17 @@ const Comments: React.FC<CommentsProps> = ({
           onCreateComment={onCreateComment}
         />
       </Flex>
+      <Stack spacing={6}>
+        {comments.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            onDeleteComment={onDeleteComment}
+            loadingDelete={deleteLoading}
+            userId={user?.uid as string}
+          />
+        ))}
+      </Stack>
     </Box>
   );
 };
