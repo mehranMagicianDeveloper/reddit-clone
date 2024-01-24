@@ -1,4 +1,4 @@
-import { Post } from "@/src/atoms/postAtom";
+import { Post, postState } from "@/src/atoms/postAtom";
 import { Box, Flex } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { firestore } from "@/src/firebase/clientApp";
+import { useSetRecoilState } from "recoil";
 
 type CommentsProps = {
   user?: User;
@@ -40,6 +41,7 @@ const Comments: React.FC<CommentsProps> = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
+  const setPostState = useSetRecoilState(postState);
 
   const onCreateComment = async (commentText: string) => {
     setCreateLoading(true);
@@ -73,6 +75,14 @@ const Comments: React.FC<CommentsProps> = ({
       setCommentText("");
 
       setComments((prev) => [newComment, ...prev]);
+
+      setPostState((prev) => ({
+        ...prev,
+        selectedPost: {
+          ...prev.selectedPost,
+          numberOfComments: prev.selectedPost?.numberOfComments! + 1,
+        } as Post,
+      }));
     } catch (error: any) {
       console.log("onCreateComment error", error);
     }
