@@ -96,8 +96,17 @@ const Comments: React.FC<CommentsProps> = ({
     setDeleteLoading(true);
     // delete comment document
     // update post comment number -1
-
     try {
+      const batch = writeBatch(firestore);
+      const commentDocRef = doc(firestore, "comments", comment.id!);
+      batch.delete(commentDocRef);
+
+      const postDocRef = doc(firestore, "posts", selectedPost.id!);
+      batch.update(postDocRef, {
+        numgerOfComments: increment(-1),
+      });
+
+      await batch.commit();
     } catch (error: any) {
       console.log("onDeleteComment error", error);
     }
