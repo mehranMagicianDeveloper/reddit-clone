@@ -41,7 +41,7 @@ const Comments: React.FC<CommentsProps> = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [createLoading, setCreateLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [loadingDeleteId, setLoadingDeleteId] = useState("");
   const setPostState = useSetRecoilState(postState);
 
   const onCreateComment = async (commentText: string) => {
@@ -93,7 +93,7 @@ const Comments: React.FC<CommentsProps> = ({
   };
 
   const onDeleteComment = async (comment: Comment) => {
-    setDeleteLoading(true);
+    setLoadingDeleteId(comment.id!);
     // delete comment document
     // update post comment number -1
     try {
@@ -121,7 +121,7 @@ const Comments: React.FC<CommentsProps> = ({
       console.log("onDeleteComment error", error);
     }
     // update client state
-    setDeleteLoading(false);
+    setLoadingDeleteId("");
   };
 
   const getPostComments = async () => {
@@ -202,7 +202,7 @@ const Comments: React.FC<CommentsProps> = ({
                     key={comment.id}
                     comment={comment}
                     onDeleteComment={onDeleteComment}
-                    loadingDelete={deleteLoading}
+                    loadingDelete={loadingDeleteId === comment.id}
                     userId={user?.uid as string}
                   />
                 ))}
