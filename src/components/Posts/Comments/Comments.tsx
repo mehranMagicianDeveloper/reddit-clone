@@ -107,6 +107,16 @@ const Comments: React.FC<CommentsProps> = ({
       });
 
       await batch.commit();
+
+      setPostState((prev) => ({
+        ...prev,
+        selectedPost: {
+          ...prev.selectedPost,
+          numberOfComments: prev.selectedPost?.numberOfComments! - 1,
+        } as Post,
+      }));
+
+      setComments((prev) => prev.filter((item) => item.id !== comment.id));
     } catch (error: any) {
       console.log("onDeleteComment error", error);
     }
