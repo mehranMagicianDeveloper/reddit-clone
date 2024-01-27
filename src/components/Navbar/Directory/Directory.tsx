@@ -2,6 +2,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Flex,
   Icon,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -15,7 +16,7 @@ import useDirectory from "@/src/hooks/useDirectory";
 type DirectoryProps = {};
 
 const Directory: React.FC<DirectoryProps> = () => {
-  const { directoryState } = useDirectory();
+  const { directoryState, toggleMenuOpen } = useDirectory();
 
   return (
     <Menu isOpen={directoryState.isOpen}>
@@ -26,6 +27,7 @@ const Directory: React.FC<DirectoryProps> = () => {
         mr={2}
         ml={{ base: 0, md: 2 }}
         _hover={{ outline: "1px solid ", outlineColor: "gray.200" }}
+        onClick={toggleMenuOpen}
       >
         <Flex
           align="center"
@@ -34,10 +36,25 @@ const Directory: React.FC<DirectoryProps> = () => {
           ml={1}
         >
           <Flex align="center">
-            <Icon as={TiHome} fontSize={24} mr={{ base: 1, md: 2 }} />
+            {directoryState.selectedMenuItem.imageURL ? (
+              <Image
+                src={directoryState.selectedMenuItem.imageURL}
+                borderRadius="full"
+                alt="community"
+                boxSize="24px"
+                mr={2}
+              />
+            ) : (
+              <Icon
+                as={directoryState.selectedMenuItem.icon}
+                color={directoryState.selectedMenuItem.iconColor}
+                fontSize={24}
+                mr={{ base: 1, md: 2 }}
+              />
+            )}
             <Flex display={{ base: "none", lg: "flex" }}>
               <Text fontWeight={600} fontSize="10pt">
-                Home
+                {directoryState.selectedMenuItem.displayText}
               </Text>
             </Flex>
           </Flex>

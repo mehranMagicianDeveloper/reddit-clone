@@ -2,7 +2,7 @@ import { IconType } from "react-icons";
 import { TiHome } from "react-icons/ti";
 import { atom } from "recoil";
 
-export type DirectoryMenu = {
+export type DirectoryMenuItem = {
   displayText: string;
   link: string;
   icon: IconType;
@@ -12,10 +12,10 @@ export type DirectoryMenu = {
 
 interface DirectoryMenuState {
   isOpen: boolean;
-  selectedMenuItem: DirectoryMenu;
+  selectedMenuItem: DirectoryMenuItem;
 }
 
-export const defaultMenuItem: DirectoryMenu = {
+export const defaultMenuItem: DirectoryMenuItem = {
   displayText: "Home",
   link: "/",
   icon: TiHome,
