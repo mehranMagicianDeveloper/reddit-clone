@@ -20,6 +20,26 @@ const Communities: React.FC<CommunitiesProps> = () => {
       <CreateCommunityModal open={open} handleClose={() => setOpen(false)} />
       <Box mt={3} mb={4}>
         <Text pl={3} mb={1} fontSize="7pt" fontWeight={500}>
+          MODERATING
+        </Text>
+
+        {mySnippet
+          .filter((snippet) => snippet.isModerate)
+          .map((snippet) => (
+            <>
+              <MenuListItem
+                key={snippet.communityId}
+                icon={FaReddit}
+                displayText={`r/${snippet.communityId}`}
+                link={`r/${snippet.communityId}`}
+                iconColor="blue.500"
+                imageURL={snippet.imageURL}
+              />
+            </>
+          ))}
+      </Box>
+      <Box mt={3} mb={4}>
+        <Text pl={3} mb={1} fontSize="7pt" fontWeight={500}>
           MY COMMUNITIES
         </Text>
         <MenuItem

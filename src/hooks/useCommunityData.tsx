@@ -71,6 +71,7 @@ const useCommunityData = () => {
       const newSnippet: CommunitySnippet = {
         communityId: communityData.id,
         imageURL: communityData.imageURL || "",
+        isModerate: user?.uid === communityData.creatorId,
       };
 
       batch.set(
@@ -153,6 +154,7 @@ const useCommunityData = () => {
       setCommunityStateValue((prev) => ({ ...prev, mySnippets: [] }));
       return;
     }
+
     getMySnippets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
