@@ -34,7 +34,7 @@ export default function Home() {
     try {
       const postQuery = query(
         collection(firestore, "posts"),
-        orderBy("postVotes", "desc"),
+        orderBy("voteStatus", "desc"),
         limit(10)
       );
 
@@ -78,6 +78,7 @@ export default function Home() {
                   )?.voteValue
                 }
                 userIsCreator={user?.uid === post.creatorId}
+                homePage={true}
               />
             ))}
           </Stack>
