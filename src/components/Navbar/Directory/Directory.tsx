@@ -10,12 +10,15 @@ import {
 } from "@chakra-ui/react";
 import { TiHome } from "react-icons/ti";
 import Communities from "./Communities";
+import useDirectory from "@/src/hooks/useDirectory";
 
 type DirectoryProps = {};
 
 const Directory: React.FC<DirectoryProps> = () => {
+  const { directoryState } = useDirectory();
+
   return (
-    <Menu>
+    <Menu isOpen={directoryState.isOpen}>
       <MenuButton
         cursor="pointer"
         padding="0px 6px"
