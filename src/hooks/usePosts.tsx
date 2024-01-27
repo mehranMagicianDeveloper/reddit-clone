@@ -24,6 +24,7 @@ const usePosts = () => {
   const currentCommunity = useRecoilValue(communityState).currentCommunity;
   const setAuthModalState = useSetRecoilState(authModalState);
 
+  // ON VOTE
   const onVote = async (
     event: React.MouseEvent<SVGElement, MouseEvent>,
     post: Post,
@@ -36,6 +37,7 @@ const usePosts = () => {
       setAuthModalState({ open: true, view: "login" });
       return;
     }
+
     try {
       const { voteStatus } = post;
       const existingVote = postStateValue.postVotes.find(
@@ -123,6 +125,8 @@ const usePosts = () => {
       console.log("onVote error: ", error);
     }
   };
+
+  // ON SELECT POST
   const onSelectPost = (post: Post) => {
     setPostStateValue((prev) => ({
       ...prev,
@@ -130,6 +134,8 @@ const usePosts = () => {
     }));
     router.push(`/r/${post.communityId}/comments/${post.id}`);
   };
+
+  // ON DELETE POST
   const onDeletePost = async (post: Post): Promise<boolean> => {
     try {
       // check if post has image
