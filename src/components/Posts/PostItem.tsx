@@ -11,6 +11,7 @@ import {
   AlertIcon,
 } from "@chakra-ui/react";
 import moment from "moment";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -125,6 +126,29 @@ const PostItem: React.FC<PostItemProps> = ({
         <Stack spacing={1} padding="10px">
           <Stack direction="row" spacing={0.6} align="center" fontSize="9pt">
             {/*Home Page Check*/}
+            {homePage && (
+              <>
+                {post.comnunityImageURL ? (
+                  <Image
+                    src={post.comnunityImageURL}
+                    alt="community"
+                    borderRadius="full"
+                    boxSize="18px"
+                    mr={2}
+                  />
+                ) : (
+                  <Icon as={FaReddit} color="blue.500" fontSize="18pt" mr={1} />
+                )}
+                <Link href={`r/${post.communityId}`}>
+                  <Text
+                    fontWeight={700}
+                    _hover={{ textDecoration: "underline" }}
+                    onClick={(event) => event.stopPropagation()}
+                  >{`r/${post.communityId}`}</Text>
+                </Link>
+                <Icon as={BsDot} color="gray.500" fontSize={8} />
+              </>
+            )}
             <Text color="gray.400">
               Posted by u/{post.creatorDisplayName}{" "}
               {moment(new Date(post.createdAt.seconds * 1000)).fromNow()}
