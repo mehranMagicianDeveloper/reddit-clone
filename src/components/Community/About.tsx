@@ -1,3 +1,4 @@
+import { authModalState } from "@/src/atoms/authModalAtom";
 import { Community, communityState } from "@/src/atoms/communitiesAtom";
 import { postState } from "@/src/atoms/postAtom";
 import { auth, firestore, storage } from "@/src/firebase/clientApp";
@@ -17,6 +18,7 @@ import { collection, doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import moment from "moment";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaReddit } from "react-icons/fa";
@@ -34,6 +36,8 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const [uplaodingImage, setUploadingImage] = useState(false);
   const setCommunityStateValue = useSetRecoilState(communityState);
+  const setAuthModalState = useSetRecoilState(authModalState);
+  const router = useRouter();
 
   const onUpdateImage = async () => {
     if (!selectedFile) return;
@@ -57,6 +61,14 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
       console.log("uploadImage", error);
     }
     setUploadingImage(false);
+  };
+
+  const handleOnCreatePostClick = () => {
+    if (!user) {
+      setAuthModalState({ open: true, view: "login" });
+      return;
+    }
+    router.push(`/r/${communityData.id}/submit`);
   };
 
   return (
@@ -98,11 +110,9 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
               </Text>
             )}
           </Flex>
-          <Link href={`/r/${communityData.id}/submit`}>
-            <Button width="100%" height="30px">
-              Create Post
-            </Button>
-          </Link>
+          <Button width="100%" height="30px" onClick={handleOnCreatePostClick}>
+            Create Post
+          </Button>
           {user?.uid === communityData.creatorId && (
             <Flex direction="column" mt={1}>
               <Divider />

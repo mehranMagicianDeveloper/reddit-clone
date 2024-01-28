@@ -133,11 +133,11 @@ const PostItem: React.FC<PostItemProps> = ({
                     src={post.comnunityImageURL}
                     alt="community"
                     borderRadius="full"
-                    boxSize="18px"
+                    boxSize="20px"
                     mr={2}
                   />
                 ) : (
-                  <Icon as={FaReddit} color="blue.500" fontSize="18pt" mr={1} />
+                  <Icon as={FaReddit} color="blue.500" fontSize="17pt" mr={1} />
                 )}
                 <Link href={`r/${post.communityId}`}>
                   <Text
@@ -150,7 +150,7 @@ const PostItem: React.FC<PostItemProps> = ({
               </>
             )}
             <Text color="gray.400">
-              Posted by u/{post.creatorDisplayName}{" "}
+              Posted by u/{post.creatorDisplayName.substring(0, 6)}{" "}
               {moment(new Date(post.createdAt.seconds * 1000)).fromNow()}
             </Text>
           </Stack>
