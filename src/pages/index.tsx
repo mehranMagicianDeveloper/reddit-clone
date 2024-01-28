@@ -14,7 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import usePosts from "../hooks/usePosts";
-import { Post } from "../atoms/postAtom";
+import { Post, PostVote } from "../atoms/postAtom";
 import PostLoader from "../components/Posts/PostLoader";
 import { Stack } from "@chakra-ui/react";
 import CreatePostLink from "../components/Community/CreatePostLink";
@@ -86,7 +86,26 @@ export default function Home() {
     setLoading(false);
   };
 
-  const getUserPostVotes = () => {};
+  const getUserPostVotes = async () => {
+    try {
+      const postIds = postStateValue.posts.map((post) => post.id);
+      const postVotesQuery = query(
+        collection(firestore, `users/${user?.uid}/postVotes`),
+        where("postId", "in", postIds)
+      );
+      const postVotesDocs = await getDocs(postVotesQuery);
+      const postVotes = postVotesDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: postVotes as PostVote[],
+      }));
+    } catch (error: any) {
+      console.log("getUserPostVotes error: ", error);
+    }
+  };
 
   useEffect(() => {
     if (communityStateValue.snippetFetched) buildUserHomeFeed();
@@ -97,6 +116,18 @@ export default function Home() {
     if (!user && !loadingUesr) buildNoUserFeed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, loadingUesr]);
+
+  useEffect(() => {
+    if (user && postStateValue.posts.length) getUserPostVotes();
+
+    return () => {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, postStateValue.posts]);
 
   return (
     <PageContent>
