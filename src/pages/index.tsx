@@ -21,6 +21,8 @@ import CreatePostLink from "../components/Community/CreatePostLink";
 import PostItem from "../components/Posts/PostItem";
 import useCommunityData from "../hooks/useCommunityData";
 import Recommendations from "../components/Community/Recommendations";
+import Premium from "../components/Community/Premium";
+import PersonalHome from "../components/Community/PersonalHome";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -157,9 +159,11 @@ export default function Home() {
           </Stack>
         )}
       </>
-      <>
+      <Stack spacing={9}>
         <Recommendations />
-      </>
+        <Premium />
+        <PersonalHome />
+      </Stack>
     </PageContent>
   );
 }
