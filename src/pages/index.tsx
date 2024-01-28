@@ -20,6 +20,7 @@ import { Stack } from "@chakra-ui/react";
 import CreatePostLink from "../components/Community/CreatePostLink";
 import PostItem from "../components/Posts/PostItem";
 import useCommunityData from "../hooks/useCommunityData";
+import Recommendations from "../components/Community/Recommendations";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -156,7 +157,9 @@ export default function Home() {
           </Stack>
         )}
       </>
-      <>{/* {Recommendations} */}</>
+      <>
+        <Recommendations />
+      </>
     </PageContent>
   );
 }
