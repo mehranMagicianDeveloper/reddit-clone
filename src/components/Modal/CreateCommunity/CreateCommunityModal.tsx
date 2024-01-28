@@ -1,4 +1,5 @@
 import { auth, firestore } from "@/src/firebase/clientApp";
+import useDirectory from "@/src/hooks/useDirectory";
 import {
   Box,
   Button,
@@ -24,6 +25,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
@@ -44,6 +46,8 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   const [communityType, setCommunityType] = useState("public");
   const [error, setError] = useState("er");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toggleMenuOpen } = useDirectory();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 21) return;
@@ -84,6 +88,8 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
             `Sorry, r/${communityName} is already taken. Try another.`
           );
         }
+
+        // create a new community
         transaction.set(communityDocRef, {
           creatorId: user?.uid,
           createdAt: serverTimestamp(),
@@ -102,7 +108,9 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
         );
       });
 
-      // create a new community
+      handleClose();
+      toggleMenuOpen();
+      router.push(`/r/${communityName}`);
     } catch (error: any) {
       console.log("handleCreateCommunity error: ", error);
       setError(error.message);

@@ -5,20 +5,28 @@ import { auth, firestore } from "../firebase/clientApp";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { communityState } from "../atoms/communitiesAtom";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import usePosts from "../hooks/usePosts";
 import { Post } from "../atoms/postAtom";
 import PostLoader from "../components/Posts/PostLoader";
 import { Stack } from "@chakra-ui/react";
 import CreatePostLink from "../components/Community/CreatePostLink";
 import PostItem from "../components/Posts/PostItem";
+import useCommunityData from "../hooks/useCommunityData";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [user, loadingUesr] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
-  const communityStateValue = useRecoilValue(communityState);
+  const { communityStateValue } = useCommunityData();
   const {
     postStateValue,
     setPostStateValue,
@@ -27,7 +35,35 @@ export default function Home() {
     onVote,
   } = usePosts();
 
-  const buildUserHomeFeed = () => {};
+  const buildUserHomeFeed = async () => {
+    setLoading(true);
+    try {
+      if (communityStateValue.mySnippets.length) {
+        const myCommunityIds = communityStateValue.mySnippets.map(
+          (snippet) => snippet.communityId
+        );
+        const postQuery = query(
+          collection(firestore, "posts"),
+          where("communityId", "in", myCommunityIds),
+          limit(10)
+        );
+        const postDocs = await getDocs(postQuery);
+        const posts = postDocs.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setPostStateValue((prev) => ({
+          ...prev,
+          posts: posts as Post[],
+        }));
+      } else {
+        buildNoUserFeed();
+      }
+    } catch (error: any) {
+      console.log("buildUserHomeFeed error: ", error);
+    }
+    setLoading(false);
+  };
 
   const buildNoUserFeed = async () => {
     setLoading(true);
@@ -51,6 +87,11 @@ export default function Home() {
   };
 
   const getUserPostVotes = () => {};
+
+  useEffect(() => {
+    if (communityStateValue.snippetFetched) buildUserHomeFeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [communityStateValue.snippetFetched]);
 
   useEffect(() => {
     if (!user && !loadingUesr) buildNoUserFeed();
