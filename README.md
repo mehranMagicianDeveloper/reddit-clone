@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+It`s the vercel link you can click on and see the application https://reddit-clone-psi-blue.vercel.app/
+
 ## Getting Started
 
 First, run the development server:
